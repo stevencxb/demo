@@ -4,7 +4,10 @@ import com.alibaba.fastjson.JSONObject;
 
 import java.lang.management.GarbageCollectorMXBean;
 import java.lang.management.ManagementFactory;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Title: Test
@@ -17,33 +20,83 @@ public class Test {
     
     public static void main(String [] args){
 
-        ReqVO reqVO = new ReqVO();
-        reqVO.setEcno("MJ_102");
-        JSONObject data =  new JSONObject();
-        data.put("orderNo",1111111);
-        reqVO.setRequestData(data);
-        JSONObject result = null;
-        try {
-            result = PhFundUtil.execute("https://m.test.phfund.com.cn/openapi/addBankCardQuery", reqVO);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
+        /**
+         * 通知第三方
+         */
+        Map<String, Object> notifyParams = new HashMap<String, Object>();
 
-        System.out.println(result);
+        notifyParams.put("outTradeNo", "outTradeNo");
+        notifyParams.put("notifyUrl", "111");
 
-//        System.out.println(64 << 1);
+        EventCreateRequest notifyEvent = new EventCreateRequest();
+        notifyEvent.setCreateTime(new Date());
+        notifyEvent.setDelayPublish(false);
+        notifyEvent.setDetail(notifyParams);
+        notifyEvent.setName("payment-notice");
 
-//        List<GarbageCollectorMXBean> list = ManagementFactory.getGarbageCollectorMXBeans();
-//        for (GarbageCollectorMXBean bean:list) {
-//            System.out.println(bean.getName());
-//        }
-//
-//
-//        MyThread myThread = new MyThread();
 
+        String notifyUrl = "222";
+        notifyParams.put("notifyUrl", notifyUrl);
 
 
     }
 
 
+}
+
+class EventCreateRequest{
+    /** 事件类型，必填项 */
+    private String type;
+
+    /** 业务名称，必填项 */
+    private String name;
+
+    /** 事件业务明细，必填项 */
+    private Map<String, Object> detail;
+
+    /** 创建时间 */
+    private Date createTime;
+
+    /** 是否延迟发布 */
+    private boolean delayPublish;
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Map<String, Object> getDetail() {
+        return detail;
+    }
+
+    public void setDetail(Map<String, Object> detail) {
+        this.detail = detail;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public boolean isDelayPublish() {
+        return delayPublish;
+    }
+
+    public void setDelayPublish(boolean delayPublish) {
+        this.delayPublish = delayPublish;
+    }
 }
